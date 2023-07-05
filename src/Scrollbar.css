@@ -1,0 +1,20 @@
+.scrollbox {
+	overflow: auto;
+	visibility: hidden;
+}
+
+.scrollbox-content,
+.scrollbox:hover,
+.scrollbox:focus {
+	visibility: visible;
+}
+
+.scrollbox::-webkit-scrollbar {
+	background-color: transparent;
+	width: 8px;
+}
+
+.scrollbox::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: hsl(212, 15%, 40%);
+}
