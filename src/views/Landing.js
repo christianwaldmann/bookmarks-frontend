@@ -1,5 +1,6 @@
 import React from "react";
 import Accordion from "../components/Accordion";
+import Footer from "../components/Footer";
 
 export default function Landing() {
 	return (
@@ -358,6 +359,7 @@ export default function Landing() {
 					</Accordion>
 				</div>
 			</div>
+			<Footer />
 		</div>
 	);
 }
