@@ -36,6 +36,7 @@ class App extends Component {
 							<Helmet>
 								<title>Bookmarks</title>
 								<body class="bg-white dark:bg-gray-850"></body>
+								<script async src={window._env_.BOOKMARKS_UMAMI_TRACKING_LINK} data-website-id={window._env_.BOOKMARKS_UMAMI_TRACKING_CODE}></script>
 							</Helmet>
 							<Switch>
 								<PrivateRoute
