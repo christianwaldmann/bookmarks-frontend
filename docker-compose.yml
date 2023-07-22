@@ -4,12 +4,12 @@ services:
     frontend:
         build:
             context: .
-            args:
-                - BOOKMARKS_BACKEND_BASE_URL=http://localhost:8000
-                - BOOKMARKS_GITHUB_LINK=https://github.com/christianwaldmann?tab=repositories&q=bookmarks
-                - BOOKMARKS_STATUS_LINK=https://status.christianw.de/status/bookmarks
-                - BOOKMARKS_API_DOCS_LINK=https://api.bookmarks.christianw.de/v1/docs
-                - BOOKMARKS_UMAMI_TRACKING_LINK=https://analytics.christianw.de/script.js
-                - BOOKMARKS_UMAMI_TRACKING_CODE=db5949e1-a6a1-4a42-81fd-af15899398a1
+        environment:
+            - BOOKMARKS_BACKEND_BASE_URL=http://localhost:8000
+            - BOOKMARKS_GITHUB_LINK=https://github.com/christianwaldmann?tab=repositories&q=bookmarks
+            - BOOKMARKS_STATUS_LINK=https://status.christianw.de/status/bookmarks
+            - BOOKMARKS_API_DOCS_LINK=https://api.bookmarks.christianw.de/v1/docs
+            - BOOKMARKS_UMAMI_TRACKING_LINK=https://analytics.christianw.de/script.js
+            - BOOKMARKS_UMAMI_TRACKING_CODE=db5949e1-a6a1-4a42-81fd-af15899398a1
         ports:
             - "3000:80"
