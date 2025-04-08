@@ -51,8 +51,15 @@ export const login = (username, password) => (dispatch) => {
 			dispatch({ type: LOGIN_SUCCESS, payload: res.data });
 		})
 		.catch((err) => {
-			console.log(err.response.data, err.response.status);
-			dispatch({ type: LOGIN_FAIL });
+		    const errorMsg =
+		        err.response?.data?.detail ||
+		        err.response?.data?.error ||
+		        "Login failed. Please try again.";
+
+			dispatch({
+			    type: LOGIN_FAIL,
+			    payload: { error: errorMsg },
+			});
 		});
 };
 
@@ -89,9 +96,14 @@ export const register = ({ username, password, email }) => (dispatch) => {
 			});
 		})
 		.catch((err) => {
-			console.log(err);
+		    const errorMsg =
+		        err.response?.data?.detail ||
+		        err.response?.data?.error ||
+		        "Registration failed. Please check your details and try again.";
+
 			dispatch({
-				type: REGISTER_FAIL,
+			    type: REGISTER_FAIL,
+			    payload: { error: errorMsg },
 			});
 		});
 };

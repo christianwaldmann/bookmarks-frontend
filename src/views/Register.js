@@ -14,15 +14,10 @@ export class Register extends Component {
 		isAuthenticated: PropTypes.bool,
 	};
 
-	state = {
-		bShowAlertRegistrationFailed: false,
-	};
-
 	onSubmit = (values) => {
 		const { username, email, password, password2 } = values;
 		if (password !== password2) {
 			console.log("Passwords do not match!");
-			alert("Passwords do not match!");
 			return;
 		}
 		const newUser = {
@@ -31,7 +26,6 @@ export class Register extends Component {
 			email,
 		};
 		this.props.register(newUser);
-		this.setState({ bShowAlertRegistrationFailed: true });
 	};
 
 	render() {
@@ -178,18 +172,13 @@ export class Register extends Component {
 												)}
 											</div>
 										</Form>
-										{this.state
-											.bShowAlertRegistrationFailed ? (
+										{this.props.hasTriedRegister && this.props.error && (
 											<div
 												class="text-red-500 px-4 py-3 text-center rounded relative text-sm mt-5"
 												role="alert"
 											>
-												Sorry, registration failed.
-												Please double-check your
-												information.
+											    {this.props.error}
 											</div>
-										) : (
-											<div></div>
 										)}
 									</Fragment>
 								)}
@@ -215,6 +204,8 @@ export class Register extends Component {
 
 const mapStateToProps = (state) => ({
 	isAuthenticated: state.auth.isAuthenticated,
+	error: state.auth.error,
+	hasTriedRegister: state.auth.hasTriedRegister,
 });
 
 export default connect(mapStateToProps, { register })(Register);

@@ -14,13 +14,8 @@ export class Login extends Component {
 		isAuthenticated: PropTypes.bool,
 	};
 
-	state = {
-		bShowAlertIncorrectPassword: false,
-	};
-
 	onSubmit = (values) => {
 		this.props.login(values.username, values.password);
-		this.setState({ bShowAlertIncorrectPassword: true });
 	};
 
 	render() {
@@ -98,18 +93,13 @@ export class Login extends Component {
 												)}
 											</div>
 										</Form>
-										{this.state
-											.bShowAlertIncorrectPassword ? (
+										{this.props.hasTriedLogin && this.props.error && (
 											<div
 												class="text-red-500 px-4 py-3 text-center rounded relative text-sm mt-5"
 												role="alert"
 											>
-												Sorry, your password was
-												incorrect. Please double-check
-												your password.
+											    {this.props.error}
 											</div>
-										) : (
-											<div></div>
 										)}
 										<div className="mt-12 sm:mt-6 flex justify-center">
 											<Link
@@ -143,6 +133,8 @@ export class Login extends Component {
 
 const mapStateToProps = (state) => ({
 	isAuthenticated: state.auth.isAuthenticated,
+	error: state.auth.error,
+	hasTriedLogin: state.auth.hasTriedLogin,
 });
 
 export default connect(mapStateToProps, { login })(Login);
