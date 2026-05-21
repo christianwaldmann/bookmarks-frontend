@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getBookmarks } from "../actions/bookmarks";
 import { clearSearchValue } from "../actions/search";
-import { getCategoryByKey, isValidCategory, getSortOrderForCategory } from "../config/categories";
+import { isValidCategory, getSortOrderForCategory } from "../config/categories";
 import Error404NotFound from "./Error404NotFound";
 
 class CategoryPageInner extends Component {
@@ -39,7 +39,6 @@ class CategoryPageInner extends Component {
 			return <Error404NotFound />;
 		}
 
-		const categoryConfig = getCategoryByKey(categoryKey);
 		const sortOrder = getSortOrderForCategory(categoryKey);
 
 		let bookmarks_split_by_category_obj = groupBy(
