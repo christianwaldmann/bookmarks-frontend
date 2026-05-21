@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { __RouterContext } from "react-router";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import { Helmet } from "react-helmet";
 import Alert from "react-s-alert";
-import Home from "./views/Home";
-import Personal from "./views/Personal";
-import Career from "./views/Career";
-import Programming from "./views/Programming";
-import Gaming from "./views/Gaming";
+import CategoryPage from "./views/CategoryPage";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Settings from "./views/Settings";
@@ -20,7 +16,6 @@ import { loadUser } from "./actions/auth";
 
 import { Provider } from "react-redux";
 import store from "./store";
-import Landing from "./views/Landing";
 
 class App extends Component {
 	componentDidMount() {
@@ -39,30 +34,12 @@ class App extends Component {
 								<script async src={window._env_.BOOKMARKS_UMAMI_TRACKING_LINK} data-website-id={window._env_.BOOKMARKS_UMAMI_TRACKING_CODE}></script>
 							</Helmet>
 							<Switch>
+								<Route exact path="/">
+									<Redirect to="/home" />
+								</Route>
 								<PrivateRoute
-									exact
-									path={["/home", ""]}
-									component={Home}
-								/>
-								<PrivateRoute
-									exact
-									path="/personal"
-									component={Personal}
-								/>
-								<PrivateRoute
-									exact
-									path="/career"
-									component={Career}
-								/>
-								<PrivateRoute
-									exact
-									path="/programming"
-									component={Programming}
-								/>
-								<PrivateRoute
-									exact
-									path="/gaming"
-									component={Gaming}
+									path="/:category"
+									component={CategoryPage}
 								/>
 								<PrivateRoute
 									exact
