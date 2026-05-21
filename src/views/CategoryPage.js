@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import BookmarkContainer from "../components/BookmarkContainer";
 import Searchbar from "../components/Searchbar";
@@ -12,8 +13,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getBookmarks } from "../actions/bookmarks";
 import { clearSearchValue } from "../actions/search";
+import { isValidCategory, getSortOrderForCategory } from "../config/categories";
+import Error404NotFound from "./Error404NotFound";
 
-export class Personal extends Component {
+class CategoryPageInner extends Component {
 	componentDidMount() {
 		this.props.clearSearchValue();
 		this.props.getBookmarks();
@@ -26,23 +29,29 @@ export class Personal extends Component {
 		getBookmarks: PropTypes.func.isRequired,
 		deleteBookmark: PropTypes.func.isRequired,
 		clearSearchValue: PropTypes.func.isRequired,
+		categoryKey: PropTypes.string.isRequired,
 	};
 
 	render() {
-		// 1. Split data by category and get object with unique categories as properties
+		const { categoryKey } = this.props;
+
+		if (!isValidCategory(categoryKey)) {
+			return <Error404NotFound />;
+		}
+
+		const sortOrder = getSortOrderForCategory(categoryKey);
+
 		let bookmarks_split_by_category_obj = groupBy(
 			this.props.bookmarks_filtered_by_search,
 			"category"
 		);
 
-		// 2. Sort properties by predefined order
 		let bookmarks_split_by_category_obj_sorted =
 			sortObjectPropertiesByPredefinedOrder(
 				bookmarks_split_by_category_obj,
-				["personal", "home", "career", "programming", "gaming"]
+				sortOrder
 			);
 
-		// 3. Transform object with properties to array with subarrays
 		let bookmarks_split_by_category_arr_sorted = Object.entries(
 			bookmarks_split_by_category_obj_sorted
 		).map(([k, v]) => v);
@@ -60,13 +69,12 @@ export class Personal extends Component {
 				>
 					<div class="bg-gray-100 dark:bg-gray-900 sm:h-full h-auto sm:w-1/3 border-r dark:border-gray-700 w-full">
 						<div class="ml-auto md:w-56 sm:pt-10">
-							<Navbar activeitem={"personal"} />
+							<Navbar activeitem={categoryKey} />
 						</div>
 					</div>
 					<div class="flex p-2 w-full sm:w-auto">
 						{this.props.search_value !== "" ? (
 							[
-								// Search view
 								bookmarks_split_by_category_arr_sorted.length ? (
 									<div></div>
 								) : (
@@ -106,7 +114,6 @@ export class Personal extends Component {
 								</div>,
 							]
 						) : (
-							// Default view
 							<div class="scrollbox overflow-y-scroll w-full sm:w-auto">
 								<div
 									class="scrollbox-content"
@@ -116,7 +123,7 @@ export class Personal extends Component {
 								>
 									<BookmarkContainer
 										bookmarks={this.props.bookmarks}
-										category={"personal"}
+										category={categoryKey}
 										bflagShowAddBookmarkButton={true}
 									/>
 								</div>
@@ -129,12 +136,19 @@ export class Personal extends Component {
 	}
 }
 
-const mapStateToProps = (state) => ({
-	bookmarks: state.bookmarks.bookmarks_personal,
-	search_value: state.search.search_value,
-	bookmarks_filtered_by_search: state.search.bookmarks_filtered_by_search,
+const CategoryPage = withRouter((props) => {
+	const categoryKey = props.categoryKey || props.match.params.category;
+	const mapStateToProps = (state) => ({
+		bookmarks: state.bookmarks[`bookmarks_${categoryKey}`] || [],
+		search_value: state.search.search_value,
+		bookmarks_filtered_by_search: state.search.bookmarks_filtered_by_search,
+	});
+
+	const Connected = connect(mapStateToProps, { getBookmarks, clearSearchValue })(
+		CategoryPageInner
+	);
+
+	return <Connected {...props} categoryKey={categoryKey} />;
 });
 
-export default connect(mapStateToProps, { getBookmarks, clearSearchValue })(
-	Personal
-);
+export default CategoryPage;

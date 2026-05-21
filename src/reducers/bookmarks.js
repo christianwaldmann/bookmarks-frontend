@@ -5,37 +5,32 @@ import {
 	UPDATE_BOOKMARK,
 } from "../actions/types";
 import { sortBookmarks } from "../utility_functions";
+import { CATEGORIES } from "../config/categories";
 
-const initialState = {
-	bookmarks: [],
-	bookmarks_home: [],
-	bookmarks_personal: [],
-	bookmarks_career: [],
-	bookmarks_programming: [],
-	bookmarks_gaming: [],
-};
+function buildInitialState() {
+	const state = { bookmarks: [] };
+	CATEGORIES.forEach((cat) => {
+		state[`bookmarks_${cat.key}`] = [];
+	});
+	return state;
+}
 
-export default function (state = initialState, action) {
+function categorizeBookmarks(bookmarks) {
+	const categorized = { bookmarks };
+	CATEGORIES.forEach((cat) => {
+		categorized[`bookmarks_${cat.key}`] = bookmarks.filter(
+			(item) => item.category === cat.key
+		);
+	});
+	return categorized;
+}
+
+export default function (state = buildInitialState(), action) {
 	switch (action.type) {
 		case GET_BOOKMARKS:
 			return {
 				...state,
-				bookmarks: sortBookmarks(action.payload),
-				bookmarks_home: action.payload.filter(
-					(item) => item.category === "home"
-				),
-				bookmarks_personal: action.payload.filter(
-					(item) => item.category === "personal"
-				),
-				bookmarks_career: action.payload.filter(
-					(item) => item.category === "career"
-				),
-				bookmarks_programming: action.payload.filter(
-					(item) => item.category === "programming"
-				),
-				bookmarks_gaming: action.payload.filter(
-					(item) => item.category === "gaming"
-				),
+				...categorizeBookmarks(sortBookmarks(action.payload)),
 			};
 		case ADD_BOOKMARK:
 			const bookmarks_after_add = sortBookmarks([
@@ -44,22 +39,7 @@ export default function (state = initialState, action) {
 			]);
 			return {
 				...state,
-				bookmarks: bookmarks_after_add,
-				bookmarks_home: bookmarks_after_add.filter(
-					(item) => item.category === "home"
-				),
-				bookmarks_personal: bookmarks_after_add.filter(
-					(item) => item.category === "personal"
-				),
-				bookmarks_career: bookmarks_after_add.filter(
-					(item) => item.category === "career"
-				),
-				bookmarks_programming: bookmarks_after_add.filter(
-					(item) => item.category === "programming"
-				),
-				bookmarks_gaming: bookmarks_after_add.filter(
-					(item) => item.category === "gaming"
-				),
+				...categorizeBookmarks(bookmarks_after_add),
 			};
 		case DELETE_BOOKMARK:
 			const bookmarks_after_delete = sortBookmarks(
@@ -67,22 +47,7 @@ export default function (state = initialState, action) {
 			);
 			return {
 				...state,
-				bookmarks: bookmarks_after_delete,
-				bookmarks_home: bookmarks_after_delete.filter(
-					(item) => item.category === "home"
-				),
-				bookmarks_personal: bookmarks_after_delete.filter(
-					(item) => item.category === "personal"
-				),
-				bookmarks_career: bookmarks_after_delete.filter(
-					(item) => item.category === "career"
-				),
-				bookmarks_programming: bookmarks_after_delete.filter(
-					(item) => item.category === "programming"
-				),
-				bookmarks_gaming: bookmarks_after_delete.filter(
-					(item) => item.category === "gaming"
-				),
+				...categorizeBookmarks(bookmarks_after_delete),
 			};
 		case UPDATE_BOOKMARK:
 			const bookmarks_after_update = sortBookmarks(
@@ -94,22 +59,7 @@ export default function (state = initialState, action) {
 			);
 			return {
 				...state,
-				bookmarks: bookmarks_after_update,
-				bookmarks_home: bookmarks_after_update.filter(
-					(item) => item.category === "home"
-				),
-				bookmarks_personal: bookmarks_after_update.filter(
-					(item) => item.category === "personal"
-				),
-				bookmarks_career: bookmarks_after_update.filter(
-					(item) => item.category === "career"
-				),
-				bookmarks_programming: bookmarks_after_update.filter(
-					(item) => item.category === "programming"
-				),
-				bookmarks_gaming: bookmarks_after_update.filter(
-					(item) => item.category === "gaming"
-				),
+				...categorizeBookmarks(bookmarks_after_update),
 			};
 		default:
 			return state;

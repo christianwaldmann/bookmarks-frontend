@@ -5,11 +5,7 @@ import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import { Helmet } from "react-helmet";
 import Alert from "react-s-alert";
-import Home from "./views/Home";
-import Personal from "./views/Personal";
-import Career from "./views/Career";
-import Programming from "./views/Programming";
-import Gaming from "./views/Gaming";
+import CategoryPage from "./views/CategoryPage";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Settings from "./views/Settings";
@@ -20,7 +16,6 @@ import { loadUser } from "./actions/auth";
 
 import { Provider } from "react-redux";
 import store from "./store";
-import Landing from "./views/Landing";
 
 class App extends Component {
 	componentDidMount() {
@@ -41,33 +36,8 @@ class App extends Component {
 							<Switch>
 								<PrivateRoute
 									exact
-									path={["/home", ""]}
-									component={Home}
-								/>
-								<PrivateRoute
-									exact
-									path="/personal"
-									component={Personal}
-								/>
-								<PrivateRoute
-									exact
-									path="/career"
-									component={Career}
-								/>
-								<PrivateRoute
-									exact
-									path="/programming"
-									component={Programming}
-								/>
-								<PrivateRoute
-									exact
-									path="/gaming"
-									component={Gaming}
-								/>
-								<PrivateRoute
-									exact
-									path="/settings"
-									component={Settings}
+									path="/"
+									component={() => <CategoryPage categoryKey="home" />}
 								/>
 								<Route exact path="/login">
 									<Login />
@@ -75,6 +45,15 @@ class App extends Component {
 								<Route exact path="/register">
 									<Register />
 								</Route>
+								<PrivateRoute
+									exact
+									path="/settings"
+									component={Settings}
+								/>
+								<PrivateRoute
+									path="/:category"
+									component={CategoryPage}
+								/>
 								<Route component={Error404NotFound} />
 							</Switch>
 							<Alert stack={{ limit: 3 }} />
