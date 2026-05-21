@@ -37,21 +37,21 @@ class App extends Component {
 								<Route exact path="/">
 									<Redirect to="/home" />
 								</Route>
-								<PrivateRoute
-									path="/:category"
-									component={CategoryPage}
-								/>
-								<PrivateRoute
-									exact
-									path="/settings"
-									component={Settings}
-								/>
 								<Route exact path="/login">
 									<Login />
 								</Route>
 								<Route exact path="/register">
 									<Register />
 								</Route>
+								<PrivateRoute
+									exact
+									path="/settings"
+									component={Settings}
+								/>
+								<PrivateRoute
+									path="/:category"
+									component={CategoryPage}
+								/>
 								<Route component={Error404NotFound} />
 							</Switch>
 							<Alert stack={{ limit: 3 }} />
