@@ -1,6 +1,19 @@
 version: "3.3"
 
 services:
+    backend:
+        image: ghcr.io/christianwaldmann/bookmarks-backend:v0.0.6
+        environment:
+            - PORT=8000
+            - DATABASE_URL=sqlite:///database/db.sqlite3
+            - BOOKMARKS_SECRET_KEY=change-me-in-production-use-a-random-string
+            - BOOKMARKS_BACKEND_DOMAIN=localhost
+            - BOOKMARKS_FRONTEND_BASE_URL=http://localhost:3000
+        volumes:
+            - backend-data:/database
+        ports:
+            - "8000:80"
+
     frontend:
         build:
             context: .
@@ -13,3 +26,6 @@ services:
             - BOOKMARKS_UMAMI_TRACKING_CODE=db5949e1-a6a1-4a42-81fd-af15899398a1
         ports:
             - "3000:80"
+
+volumes:
+    backend-data:

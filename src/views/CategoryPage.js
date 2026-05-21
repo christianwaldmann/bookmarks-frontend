@@ -137,7 +137,7 @@ class CategoryPageInner extends Component {
 }
 
 const CategoryPage = withRouter((props) => {
-	const categoryKey = props.match.params.category;
+	const categoryKey = props.categoryKey || props.match.params.category;
 	const mapStateToProps = (state) => ({
 		bookmarks: state.bookmarks[`bookmarks_${categoryKey}`] || [],
 		search_value: state.search.search_value,

@@ -30,7 +30,7 @@ export class Register extends Component {
 
 	render() {
 		if (this.props.isAuthenticated) {
-			return <Redirect to="/" />;
+			return <Redirect to="/home" />;
 		}
 
 		return (
